@@ -1,19 +1,29 @@
-import { useSelector, useDispatch } from "react-redux";
-import { randomNumber, getMovieAndReviews } from "../../helper_method";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
-export default function RecommendMovies({ movie }) {
-  const { movies } = useSelector((state) => state.moviesReducer);
-  const genres = movie.genre.split(",");
-  const genre = genres[randomNumber(0, genres.length)];
-  const ran_num = randomNumber(8, movies.length - 8) + 8;
-  const recommend_movies = movies
-    .filter(
-      (_movie) =>
-        _movie.genre.match(new RegExp(genre, "i")) &&
-        _movie.title !== movie.title
-    )
-    .slice(ran_num - 8, ran_num);
-  const dispatch = useDispatch();
+import { useEffect, useState } from "react";
+import axios from "../../helper/init.axios";
+import { useNavigate } from "react-router-dom";
+
+export default function RecommendMovies({ movie: paramsMovie }) {
+  const [recommend_movies, setRecommendMovies] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `/movie/recommendations/${paramsMovie._id}`,
+          {
+            params: {
+              limit: 8,
+            },
+          }
+        );
+        setRecommendMovies(res.data.metadata);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [paramsMovie._id]);
 
   return (
     <section className="movie__related my-5 bg-light py-5">
@@ -36,10 +46,9 @@ export default function RecommendMovies({ movie }) {
                   key={
                     "movie detail page recommend movies movie " + movie.title
                   }
-                  onClick={async () => {
-                    let _data = await getMovieAndReviews(movie);
+                  onClick={() => {
+                    navigate(`/movie_info/${movie._id}`);
                     window.scrollTo(0, 0);
-                    dispatch(A_set_movie_info(_data));
                   }}
                 >
                   <div className="movie__poster">

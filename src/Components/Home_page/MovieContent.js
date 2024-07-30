@@ -1,22 +1,16 @@
-import { useDispatch } from "react-redux";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
-import { getMovieAndReviews } from "../../helper_method";
 import { useNavigate } from "react-router-dom";
-export default function MovieContent(props) {
-  let { title, release_date, genre, poster_path } = props.movie;
+export default function MovieContent({ movie }) {
+  let { title, release_date, genre, poster_path } = movie;
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   return (
     <div className="movie shadow-hover-dark m-2 p-0">
       <div className="movie__poster">
         <div
           className="masvideos-LoopMovie-link masvideos-loop-movie__link movie__link"
           role="button"
-          onClick={async () => {
-            let _data = await getMovieAndReviews(props.movie);
-            dispatch(A_set_movie_info(_data));
+          onClick={() => {
             window.scrollTo(0, 0);
-            navigate("/movie_info");
+            navigate(`/movie_info/${movie._id}`);
           }}
         >
           <img

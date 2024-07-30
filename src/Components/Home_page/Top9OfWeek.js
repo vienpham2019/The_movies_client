@@ -1,6 +1,5 @@
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
 import {
   A_filter_movies,
   A_set_sort_movies_by,
@@ -8,7 +7,6 @@ import {
   A_movie_page,
 } from "../../reducer/Actions/movies_action";
 
-import { getMovieAndReviews } from "../../helper_method";
 import { useNavigate } from "react-router-dom";
 import axios from "../../helper/init.axios";
 
@@ -164,12 +162,10 @@ export default function Top9OfWeek() {
                                 className="movie-actions--link_watch"
                                 role="button"
                                 onClick={async () => {
-                                  let _data = await getMovieAndReviews(
-                                    newest_movie_info
-                                  );
                                   window.scrollTo(0, 0);
-                                  dispatch(A_set_movie_info(_data));
-                                  navigate("/movie_info");
+                                  navigate(
+                                    `/movie_info/${newest_movie_info._id}`
+                                  );
                                 }}
                               >
                                 More Info

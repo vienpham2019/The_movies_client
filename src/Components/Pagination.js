@@ -1,11 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
-import { A_movie_page } from "../reducer/Actions/movies_action";
-export default function Pagination(props) {
-  const dispatch = useDispatch();
-  const { pages } = props;
-  const { movie_page } = useSelector((state) => state.moviesReducer);
-
-  const currentPage = movie_page + 1;
+export default function Pagination({ pages, currentPage = 1, setPage }) {
   const beforeCurrent =
     currentPage === 1
       ? 1
@@ -15,8 +8,8 @@ export default function Pagination(props) {
   const afterCurrent = currentPage > 4 ? currentPage + 1 : 4;
 
   const handelCurrentPage = (page) => {
-    if (!props.is_review) window.scrollTo(0, 0);
-    dispatch(A_movie_page(page - 1));
+    window.scrollTo(0, 0);
+    setPage(page);
   };
 
   return (

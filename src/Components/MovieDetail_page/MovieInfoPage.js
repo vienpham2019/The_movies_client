@@ -23,7 +23,7 @@ export default function MovieInfoPage() {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
   return (
     <div>
       {movie && (

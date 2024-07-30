@@ -1,9 +1,29 @@
-import { useSelector, useDispatch } from "react-redux";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
-import { getMovieAndReviews } from "../../helper_method";
-export default function TopMovies(props) {
-  const dispatch = useDispatch();
-  const { movies } = useSelector((state) => state.moviesReducer);
+import { useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+import axios from "../../helper/init.axios";
+
+export default function TopMovies() {
+  const navigate = useNavigate();
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/movie/all`, {
+          params: {
+            page: 1,
+            limit: 5,
+            sortBy: "vote_average",
+          },
+        });
+        setMovies(response.data.metadata.movies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div
       className="top-movies-list"
@@ -22,10 +42,8 @@ export default function TopMovies(props) {
                   role="button"
                   key={"movies page top movies movie " + movie.title + index}
                   onClick={async () => {
-                    let _data = await getMovieAndReviews(movie);
                     window.scrollTo(0, 0);
-                    dispatch(A_set_movie_info(_data));
-                    props.history.push("/movie_info");
+                    navigate(`/movie_info/${movie._id}`);
                   }}
                 >
                   <div className="movie-list">

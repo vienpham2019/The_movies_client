@@ -1,15 +1,10 @@
-import {
-  getDate,
-  getFirstNGenre,
-  getMovieAndReviews,
-} from "../../helper_method";
+import { getDate, getFirstNGenre } from "../../helper_method";
 import {
   handle_update_widhlist,
   handle_update_favorite,
   handle_notification,
 } from "../../user_helper_method";
 import { useDispatch, useSelector } from "react-redux";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
 import {
   A_update_widhlist,
   A_update_favorite,
@@ -18,21 +13,13 @@ import {
 import { A_set_notification } from "../../reducer/Actions/notification_action";
 import { useNavigate } from "react-router-dom";
 
-export default function DisplayMovies(props) {
+export default function DisplayMovies({ vodi_value, movies }) {
   const navigate = useNavigate();
-  let { vodi_value } = props;
   const { notifications } = useSelector((state) => state.notificationReducer);
-  const { filter_movies, movie_page, display_movies_amount } = useSelector(
-    (state) => state.moviesReducer
-  );
   const { widhlists, favorites, user, token } = useSelector(
     (state) => state.userReducer
   );
   const dispatch = useDispatch();
-  const display_movies = filter_movies.slice(
-    movie_page * display_movies_amount,
-    (movie_page + 1) * display_movies_amount
-  );
 
   const handle_widhlist = async (movie) => {
     if (!user) {
@@ -66,15 +53,22 @@ export default function DisplayMovies(props) {
     );
   };
 
+  if (movies.length === 0)
+    return (
+      <div className="d-flex justify-content-center">
+        <span className="fs-4 fw-bold text-light">No movie found</span>
+      </div>
+    );
+
   return (
-    <div className="vodi-archive-wrapper px-3" data-view={vodi_value}>
+    <div className="vodi-archive-wrapper px-3 " data-view={vodi_value}>
       <div
         className={`movies ${
           vodi_value === "grid-extended" ? "columns-4" : "columns-5"
         }`}
       >
         <div className="movies__inner">
-          {display_movies.map((movie, index) => (
+          {movies.map((movie, index) => (
             <div
               className="movie p-2"
               key={"movies page display movies movie " + movie.title + index}
@@ -82,11 +76,9 @@ export default function DisplayMovies(props) {
               <div
                 className="movie__poster h-100"
                 role="button"
-                onClick={async () => {
-                  let _data = await getMovieAndReviews(movie);
+                onClick={() => {
                   window.scrollTo(0, 0);
-                  dispatch(A_set_movie_info(_data));
-                  navigate("/movie_info");
+                  navigate(`/movie_info/${movie._id}`);
                 }}
               >
                 <img
@@ -135,11 +127,9 @@ export default function DisplayMovies(props) {
                       className="btn_ btn-block_ btn-outline-dark_ text-white border mr-2"
                       role="button"
                       style={{ width: "150px" }}
-                      onClick={async () => {
+                      onClick={() => {
                         window.scrollTo(0, 0);
-                        let _data = await getMovieAndReviews(movie);
-                        dispatch(A_set_movie_info(_data));
-                        props.history.push("/movie_info");
+                        navigate(`/movie_info/${movie._id}`);
                       }}
                     >
                       <i className="fas fa-info"></i> More Info

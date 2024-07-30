@@ -1,21 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DisplayMovies from "./DisplayMovies";
 import MoviesFilter from "./MoviesFilter";
 import TopMovies from "./TopMovies";
 import Pagination from ".././Pagination";
 import "./Movies.css";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  A_filter_movies,
-  A_set_fillter_genre_and_year,
-} from "../../reducer/Actions/movies_action";
+
+import axios from "../../helper/init.axios";
 
 export default function MoviesPage(props) {
-  const { filter_movies, movies } = useSelector((state) => state.moviesReducer);
-  const displayMoviesAmount = 20;
-  const dispatch = useDispatch();
   const [vodi_value, setVodiValue] = useState("grid");
   const [displaySideBar, setSideBar] = useState(false);
+  const [page, setPage] = useState(1);
+  const limit = 20;
+  const [search, setSearch] = useState("");
+  const [movies, setMovies] = useState([]);
+  const [totalMovies, setTotalMovies] = useState(0);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/movie/all`, {
+          params: {
+            page,
+            limit,
+            search,
+          },
+        });
+        setMovies(response.data.metadata.movies);
+        setTotalMovies(response.data.metadata.totalMovies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [page, limit, search]);
 
   let vodi = [
     { type: "grid", value: "fas fa-th" },
@@ -24,18 +43,7 @@ export default function MoviesPage(props) {
     { type: "list", value: "fas fa-bars" },
   ];
 
-  const handelSearchMovie = (title) => {
-    if (title !== "") {
-      const f_movies = movies.filter((movie) =>
-        movie.title.match(new RegExp(title, "i"))
-      );
-      let genre = f_movies[0] ? f_movies[0].genre.split(", ")[0] : "All";
-      dispatch(A_filter_movies(f_movies));
-      dispatch(A_set_fillter_genre_and_year(genre, " "));
-    }
-  };
-
-  const pages = Math.ceil(filter_movies.length / displayMoviesAmount);
+  const pages = Math.ceil(totalMovies / limit);
 
   return (
     <div
@@ -72,7 +80,7 @@ export default function MoviesPage(props) {
                   className="mx-auto w-50 form-control border-0"
                   style={{ maxHeight: "30px" }}
                   placeholder="Search..."
-                  onChange={(e) => handelSearchMovie(e.target.value.trim())}
+                  onChange={(e) => setSearch(e.target.value.trim())}
                 />
               </div>
             </header>
@@ -106,19 +114,22 @@ export default function MoviesPage(props) {
 
             <div className="w-100">
               <div
-                className="custom-scrollbar display_movie_container_height"
+                className="custom-scrollbar "
                 style={{
                   overflowY: "auto",
                   overflowX: "hidden",
                 }}
               >
-                <DisplayMovies
-                  vodi_value={vodi_value}
-                  history={props.history}
-                />
+                <DisplayMovies movies={movies} vodi_value={vodi_value} />
               </div>
               <hr />
-              {pages > 1 && <Pagination pages={pages} />}
+              {pages > 1 && (
+                <Pagination
+                  pages={pages}
+                  currentPage={page}
+                  setPage={(page) => setPage(page)}
+                />
+              )}
               {/*  */}
             </div>
           </div>

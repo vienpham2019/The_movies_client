@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  A_set_movie_info,
-  A_set_display_videos,
-} from "../../reducer/Actions/movie_info_action";
-import { randomNumber, getMovieAndReviews } from "../../helper_method";
+import { A_set_display_videos } from "../../reducer/Actions/movie_info_action";
+import { randomNumber } from "../../helper_method";
 import { useNavigate } from "react-router-dom";
 
 export default function MidSection() {
@@ -75,11 +72,9 @@ export default function MidSection() {
                       <span
                         className="btn btn-dark text-white border border-dark rounded-0 w-50 py-2"
                         role="button"
-                        onClick={async () => {
-                          let data = await getMovieAndReviews(movie);
-                          dispatch(A_set_movie_info(data));
+                        onClick={() => {
                           window.scrollTo(0, 0);
-                          navigate("/movie_info");
+                          navigate(`/movie_info/${movie._id}`);
                         }}
                       >
                         MORE INFO

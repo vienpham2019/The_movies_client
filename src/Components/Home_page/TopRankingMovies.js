@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
 import {
   A_filter_movies,
   A_set_sort_movies_by,
@@ -8,7 +7,6 @@ import {
   A_movie_page,
 } from "../../reducer/Actions/movies_action";
 
-import { getMovieAndReviews } from "../../helper_method";
 import { useNavigate } from "react-router-dom";
 import axios from "../../helper/init.axios";
 
@@ -86,11 +84,9 @@ export default function TopRankingMovies() {
                           key={
                             "home page top raking movies movie " + movie.title
                           }
-                          onClick={async () => {
-                            let _data = await getMovieAndReviews(movie);
-                            dispatch(A_set_movie_info(_data));
+                          onClick={() => {
                             window.scrollTo(0, 0);
-                            navigate("/movie_info");
+                            navigate(`/movie_info/${movie._id}`);
                           }}
                         >
                           <div

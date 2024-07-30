@@ -8,10 +8,8 @@ import { A_add_movie_reviews } from "../../reducer/Actions/movie_info_action";
 
 import { addMovieReview, rotate_array } from "../../helper_method";
 
-export default function MovieReviews() {
-  const { movie, movie_reviews, movie_token } = useSelector(
-    (state) => state.movieInfoReducer
-  );
+export default function MovieReviews({ movie }) {
+  const { movieReviews, movie_token } = movie;
 
   const { movie_page } = useSelector((state) => state.moviesReducer);
 
@@ -21,12 +19,12 @@ export default function MovieReviews() {
   const [reivewScore, setReviewScore] = useState(10);
   const [movieNewReviewErrors, setMovieNewReviewErrors] = useState({});
 
-  const displayReviews = rotate_array(movie_reviews).slice(
+  const displayReviews = rotate_array(movieReviews).slice(
     movie_page * displayReviewAmount,
     (movie_page + 1) * displayReviewAmount
   );
 
-  const pages = Math.ceil(movie_reviews.length / displayReviewAmount);
+  const pages = Math.ceil(movieReviews.length / displayReviewAmount);
 
   const resetReviewForm = () => {
     document.getElementById("new-review-form").reset();
@@ -80,8 +78,7 @@ export default function MovieReviews() {
                   {Array.from(Array(10)).map((_, i) => (
                     <i
                       className={`${
-                        i + 1 <=
-                        movie.reviews_total_score / movie_reviews.length
+                        i + 1 <= movie.reviews_total_score / movieReviews.length
                           ? "fas"
                           : "far"
                       } fa-star`}
@@ -89,7 +86,7 @@ export default function MovieReviews() {
                     ></i>
                   ))}
                   <span className="ml-2">
-                    <strong>Reviews({movie_reviews.length})</strong>
+                    <strong>Reviews({movieReviews.length})</strong>
                   </span>
                 </div>
               </div>

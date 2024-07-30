@@ -29,8 +29,7 @@ export default function Top9OfWeek() {
           params: {
             page: 1,
             limit: 10,
-            searchBy: "genre",
-            search: filter_genre,
+            searchByGenre: filter_genre,
           },
         });
         setDisplayMovies(res.data.metadata.movies);
@@ -51,8 +50,7 @@ export default function Top9OfWeek() {
             page: 1,
             limit: 10,
             sortBy: "popularity",
-            searchBy: "genre",
-            search: filter_genre,
+            searchByGenre: filter_genre,
           },
         });
         setTop10Movies(res.data.metadata.movies);

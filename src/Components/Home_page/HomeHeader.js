@@ -18,8 +18,7 @@ export default function HomeHeader() {
           params: {
             page: 1,
             limit: 7,
-            searchBy: "genre",
-            search: "Sci-fi",
+            searchByGenre: "Sci-fi",
           },
         });
         setMovies(response.data.metadata.movies);
@@ -98,7 +97,7 @@ export default function HomeHeader() {
                               let _data = await getMovieAndReviews(movie);
                               window.scrollTo(0, 0);
                               dispatch(A_set_movie_info(_data));
-                              navigate("/movie_info");
+                              navigate(`/movie_info/${movie._id}`);
                             }}
                           >
                             <i className="fas fa-info mr-2 my-auto"></i>MORE

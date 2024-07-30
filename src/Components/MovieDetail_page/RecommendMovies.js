@@ -1,9 +1,8 @@
 import { useSelector, useDispatch } from "react-redux";
 import { randomNumber, getMovieAndReviews } from "../../helper_method";
 import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
-export default function RecommendMovies() {
+export default function RecommendMovies({ movie }) {
   const { movies } = useSelector((state) => state.moviesReducer);
-  const { movie } = useSelector((state) => state.movieInfoReducer);
   const genres = movie.genre.split(",");
   const genre = genres[randomNumber(0, genres.length)];
   const ran_num = randomNumber(8, movies.length - 8) + 8;

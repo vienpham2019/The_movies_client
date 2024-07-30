@@ -1,6 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client"; // Updated import
 import "./index.css";
+import "./style1.css";
+import "./style2.css";
+import "./style3.css";
+import "./style4.css";
 import "react-toastify/dist/ReactToastify.css";
 import App from "./App";
 import { createStore } from "redux";

@@ -28,8 +28,7 @@ export default function TopRankingMovies() {
             page: 1,
             limit: 10,
             sortBy: "vote_average",
-            searchBy: "genre",
-            search: filter_genre,
+            searchByGenre: filter_genre,
           },
         });
         setDisplayMovies(response.data.metadata.movies);

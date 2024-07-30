@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-export default function ReviewDetail(props) {
+export default function ReviewDetail({ review }) {
   const [showText, setShowText] = useState(false);
-  const { author, date, score, content } = props.review;
+  const { author, date, score, content } = review;
   return (
     <div className="review border py-4 px-2 bg-white shadow my-3">
       <div className="review-body">

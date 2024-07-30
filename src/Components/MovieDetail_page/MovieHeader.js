@@ -35,12 +35,10 @@ const styles = createUseStyles({
     },
   }),
 });
-export default function MovieHeader() {
+export default function MovieHeader({ movie }) {
   const dispatch = useDispatch();
   const { notifications } = useSelector((state) => state.notificationReducer);
-  const { movie, movie_reviews } = useSelector(
-    (state) => state.movieInfoReducer
-  );
+  const { movieReviews } = movie;
 
   const { widhlists, favorites, user, token } = useSelector(
     (state) => state.userReducer
@@ -49,9 +47,9 @@ export default function MovieHeader() {
   const is_widhlists = user && widhlists.has(movie.id);
   const is_favorites = user && favorites.has(movie.id);
 
-  const [month, day, year] = getDate(movie.release_date);
-  const revies_avg_score = movie_reviews.length
-    ? movie.reviews_total_score / movie_reviews.length
+  const [year, month, day] = movie.release_date.split("T")[0].split("-");
+  const revies_avg_score = movieReviews.length
+    ? movie.reviews_total_score / movieReviews.length
     : 0;
 
   const handle_widhlist = async () => {
@@ -148,7 +146,7 @@ export default function MovieHeader() {
                   <span style={{ fontSize: "1.2em" }}>
                     <strong className="mr-2">
                       Reviews(
-                      {movie_reviews && movie_reviews.length})
+                      {movieReviews && movieReviews.length})
                     </strong>
                     {Math.floor(revies_avg_score)}
                     /10

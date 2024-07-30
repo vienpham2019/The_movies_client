@@ -1,8 +1,6 @@
-import { getDate } from "../../helper_method";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 
-export default function MovieDescription() {
+export default function MovieDescription({ movie }) {
   const [activeDescription, setActiveDescription] = useState("STORYLINE");
 
   const {
@@ -12,12 +10,12 @@ export default function MovieDescription() {
     country,
     release_date,
     director,
-    writers,
+    writer,
     actors,
     awards,
     production_companies,
-  } = useSelector((state) => state.movieInfoReducer.movie);
-  const [month, day, year] = getDate(release_date);
+  } = movie;
+  const [year, month, day] = release_date.split("T")[0].split("-");
   const des_keys = ["STORYLINE", "ADDITIONAL INFOMATION"];
   const storyline = {
     genre,
@@ -30,7 +28,7 @@ export default function MovieDescription() {
     director,
     actors,
     awards,
-    writers,
+    writer,
   };
 
   return (

@@ -1,0 +1,135 @@
+/* Nav Bar */
+.navbar-light .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2831,37,46,0.5%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+.navbar-toggler-icon {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: middle;
+  content: "";
+  background: no-repeat center center;
+  background-size: 100% 100%;
+}
+
+/* end NavBar */
+
+/* Home Header */
+
+@media (min-width: 1350px) {
+  .swiper--pagination {
+    display: none;
+  }
+}
+
+@media (max-width: 1350px) {
+  .swiper--button {
+    display: none;
+  }
+}
+
+.swiper--button {
+  color: #707070;
+  font-size: 30px;
+  line-height: 64px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(116.12deg, #caf0ef 0.88%, #f0eae5 97.53%);
+  transition: 0.33s all linear;
+  font-family: "Material Design Icons";
+}
+
+.swiper--button-next {
+  box-shadow: -5px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.swiper--button-prev {
+  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+.swiper--button-prev:hover,
+.swiper--button-next:hover {
+  box-shadow: none;
+}
+
+.swiper--button-next::before {
+  content: "\227B";
+}
+
+.swiper--button-prev::before {
+  content: "\227A";
+}
+
+.button-custom {
+  font-weight: 700;
+}
+
+.button-custom i {
+  color: #ffe142;
+}
+
+.button-custom:hover i {
+  color: black;
+}
+
+.block--8 {
+  font-weight: 700;
+}
+
+.home-section_header {
+  position: relative;
+  width: 100%;
+  padding: 10px 0 20px 12.5px;
+}
+
+.movie_header_title {
+  font-size: 4em;
+}
+
+@media (min-width: 1200px) {
+  .home-section_header {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 28.5714285714%;
+    flex: 0 0 28.5714285714%;
+    max-width: 28.5714285714%;
+    padding-right: 67.5px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .movie_header_title {
+    font-size: 3em;
+  }
+}
+
+@media (min-width: 992px) {
+  .home-section_header {
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 40%;
+    flex: 0 0 40%;
+    max-width: 40%;
+    -webkit-align-self: center;
+    align-self: center;
+    margin-bottom: 0;
+  }
+}
+.section-title {
+  font-size: 2em;
+  font-weight: bolder;
+  border-left: 3px solid rgb(12, 156, 240);
+}
+
+/* end Home Header */
+
+/* Footer */
+.desktop--footer {
+  display: none;
+}
+
+@media (min-width: 1240px) {
+  .desktop--footer {
+    display: block;
+  }
+}
+/* end Footer */

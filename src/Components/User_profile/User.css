@@ -1,0 +1,13 @@
+.icon {
+  transform: rotate(0deg);
+  transition: ease-in-out 0.4s;
+}
+.rotate_icon:hover .rotate_down {
+  transform: rotate(90deg);
+  transition: ease-in-out 0.4s;
+}
+
+.rotate_icon:hover .rotate_up {
+  transform: rotate(-90deg);
+  transition: ease-in-out 0.4s;
+}

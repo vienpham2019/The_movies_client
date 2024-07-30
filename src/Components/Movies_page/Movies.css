@@ -1,0 +1,192 @@
+/* Filter checkbox */
+.checkbox-wrapper {
+  position: relative;
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  -webkit-appearance: none;
+}
+
+.checkbox-label {
+  position: relative;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.checkbox-label:before,
+.checkbox-label:after {
+  pointer-events: none;
+}
+
+.checkbox-label:before {
+  display: flex;
+  content: " ";
+  height: 20px;
+  width: 20px;
+  border: solid 2px #fff;
+  margin-right: 10px;
+}
+
+.checkbox-label:after {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  display: flex;
+  content: " ";
+  background: #fff;
+  transform: scale(0);
+  transition: transform 0.3s ease;
+}
+
+.checkbox-label:after {
+  height: 5px;
+  width: 12px;
+  left: 5px;
+  border-bottom: solid 2px turquoise;
+  border-left: solid 2px turquoise;
+  background: none;
+  transform: rotate(-45deg) scale(0);
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  transform-origin: center center;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + .checkbox-label::before {
+  border-color: turquoise;
+}
+
+.checkbox-wrapper input[type="checkbox"]:disabled + .checkbox-label::before {
+  background-color: rgb(100, 100, 100);
+  border-color: rgb(100, 100, 100);
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + .checkbox-label:after {
+  opacity: 1;
+  transform: rotate(-45deg) scale(0.8);
+}
+
+/* end filter checkbox */
+.display_movie_container_height {
+  height: 120em;
+}
+
+@media (max-width: 767px) {
+  .vodi-button {
+    display: none;
+  }
+}
+
+.movies-search::placeholder {
+  color: white;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.sidebar.active {
+  left: 0;
+}
+
+.dismiss {
+  display: none;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  background: #000;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.sidebar--toggler {
+  display: none;
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -420px;
+    height: 100vh;
+    z-index: 999;
+    background-color: rgb(4, 12, 34);
+    color: #fff;
+    transition: all 0.3s;
+    overflow-y: scroll;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  }
+  .dismiss {
+    display: block;
+  }
+
+  .sidebar--toggler {
+    display: block;
+  }
+  .display_movie_container_height {
+    height: auto;
+  }
+}
+
+.dismiss:hover {
+  background: #fff;
+  color: #000000;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 998;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+.overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+/* end Side bar */
+
+/* ---------------------------------------------------
+  PAGINATION 
+----------------------------------------------------- */
+
+.pagination-item {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  background-color: rgb(110, 110, 110);
+  margin: 0 4px 0 4px;
+  border: 1px solid white;
+  align-items: center;
+  display: flex;
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.pagination-item:hover {
+  background-color: rgb(41, 41, 41);
+  border-radius: 10px;
+}
+
+.pagination-active {
+  background-color: rgb(2, 60, 88);
+  border-radius: 10px;
+}
+
+.dropdown--item:hover {
+  background-color: rgb(162, 206, 247);
+}

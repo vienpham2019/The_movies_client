@@ -38,10 +38,12 @@ export default function MoviesPage(props) {
             search,
           },
         });
-        setMovies(response.data.metadata.movies);
-        setTotalMovies(response.data.metadata.totalMovies);
-        dispatch(A_set_genre_counts(response.data.metadata.genreCounts));
-        dispatch(A_set_year_counts(response.data.metadata.yearCounts));
+        const { movies, genreCounts, yearCounts, totalMovies } =
+          response.data.metadata;
+        setMovies(movies || []);
+        setTotalMovies(totalMovies || 0);
+        dispatch(A_set_genre_counts(genreCounts || []));
+        dispatch(A_set_year_counts(yearCounts || []));
       } catch (error) {
         console.error("Error fetching data:", error);
       }

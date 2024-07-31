@@ -21,6 +21,7 @@ export default function MoviesFilter() {
     Popularity: "popularity",
   };
   const [countGenres, setCountGenres] = useState({});
+  const [countYears, setCountYears] = useState({});
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -60,6 +61,23 @@ export default function MoviesFilter() {
     };
     initCounts();
   }, [genreCounts]);
+
+  useEffect(() => {
+    const initCounts = () => {
+      const updateYearCounts = {
+        "1920-1950": 0,
+        "1951-1980": 0,
+        "1981-2010": 0,
+        "2011-2018": 0,
+        "2019+": 0,
+      };
+      yearCounts.forEach((c) => {
+        updateYearCounts[c.yearRange] = c.count;
+      });
+      setCountYears(updateYearCounts);
+    };
+    initCounts();
+  }, [yearCounts]);
 
   return (
     <div>
@@ -135,7 +153,7 @@ export default function MoviesFilter() {
         </header>
 
         <div className="mt-2 d-flex flex-wrap">
-          {Object.entries(yearCounts).map(([_year, count]) => (
+          {Object.entries(countYears).map(([_year, count]) => (
             <div
               className={`px-2 py-3 bd-highlight col m-2 text-center text-info btn btn-dark ${
                 _year === fillter_movie_by_year && "border-success"
@@ -143,13 +161,15 @@ export default function MoviesFilter() {
               role="button"
               aria-disabled="true"
               style={{ borderRadius: "0" }}
-              onClick={() =>
-                dispatch(
-                  A_set_fillter_movie_by_year(
-                    _year === fillter_movie_by_year ? "" : _year
-                  )
-                )
-              }
+              onClick={() => {
+                if (count > 0) {
+                  dispatch(
+                    A_set_fillter_movie_by_year(
+                      _year === fillter_movie_by_year ? "" : _year
+                    )
+                  );
+                }
+              }}
               key={"movies page movie filter years " + _year + count}
             >
               {_year} <small className="d-inline text-white">({count})</small>

@@ -7,7 +7,10 @@ import "./Movies.css";
 
 import axios from "../../helper/init.axios";
 import { useDispatch, useSelector } from "react-redux";
-import { A_set_counts } from "../../reducer/Actions/movie_actions";
+import {
+  A_set_genre_counts,
+  A_set_year_counts,
+} from "../../reducer/Actions/movie_actions";
 
 export default function MoviesPage(props) {
   const dispatch = useDispatch();
@@ -29,6 +32,7 @@ export default function MoviesPage(props) {
             page,
             limit,
             searchByGenre: fillter_movie_by_genre,
+            searchByYears: fillter_movie_by_year,
             sortBy: sort_movie_by,
             sortDir: -1,
             search,
@@ -36,14 +40,21 @@ export default function MoviesPage(props) {
         });
         setMovies(response.data.metadata.movies);
         setTotalMovies(response.data.metadata.totalMovies);
-        dispatch(A_set_counts(response.data.metadata.counts));
+        dispatch(A_set_genre_counts(response.data.metadata.genreCounts));
+        dispatch(A_set_year_counts(response.data.metadata.yearCounts));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [page, search, fillter_movie_by_genre, sort_movie_by]);
+  }, [
+    page,
+    search,
+    fillter_movie_by_genre,
+    sort_movie_by,
+    fillter_movie_by_year,
+  ]);
 
   let vodi = [
     { type: "grid", value: "fas fa-th" },

@@ -3,15 +3,18 @@ import { getMovieFilter } from "../../helper_method";
 import { useEffect, useState } from "react";
 import {
   A_set_fillter_movie_by_genre,
+  A_set_fillter_movie_by_year,
   A_set_sort_movie_by,
 } from "../../reducer/Actions/movie_actions";
 
 export default function MoviesFilter() {
-  const filter_movies = [];
-  const fillter_movie_by_year = null;
-  const { counts, fillter_movie_by_genre, sort_movie_by } = useSelector(
-    (state) => state.moviesReducer
-  );
+  const {
+    genreCounts,
+    yearCounts,
+    fillter_movie_by_genre,
+    sort_movie_by,
+    fillter_movie_by_year,
+  } = useSelector((state) => state.moviesReducer);
   const sortBy = {
     "Release Date": "release_date",
     "IMDB Score": "vote_average",
@@ -19,8 +22,6 @@ export default function MoviesFilter() {
   };
   const [countGenres, setCountGenres] = useState({});
   const dispatch = useDispatch();
-
-  let { years, ratings } = getMovieFilter(filter_movies);
 
   useEffect(() => {
     const initCounts = () => {
@@ -50,8 +51,7 @@ export default function MoviesFilter() {
         Adult: 0,
         "Film-Noir": 0,
       };
-
-      counts.forEach((c) => {
+      genreCounts.forEach((c) => {
         if (c.hasOwnProperty("genre")) {
           updateCountGenres[c.genre] = c.count;
         }
@@ -59,31 +59,7 @@ export default function MoviesFilter() {
       setCountGenres(updateCountGenres);
     };
     initCounts();
-  }, [counts]);
-
-  const filterByYear = (year) => {
-    // let [y_start, y_end] = year.split("-");
-    // let genre = fillter_movie_by_genre;
-    // let f_movies = filter_movies.filter((movie) => {
-    //   let y = Math.floor(movie.release_date.split("-")[0]);
-    //   return Math.floor(y_start) <= y && Math.floor(y_end) >= y;
-    // });
-    // if (genre === "All") genre = f_movies[0].genre.split(", ")[0];
-    // dispatch(A_filter_movies(f_movies));
-    // dispatch(A_set_fillter_genre_and_year(genre, year));
-    // dispatch(A_movie_page(0));
-  };
-
-  const filterByRating = (rating) => {
-    // let genre = fillter_movie_by_genre;
-    // let f_movies = filter_movies.filter(
-    //   (movie) => Math.floor(movie.vote_average) === Math.floor(rating)
-    // );
-    // if (genre === "All") genre = f_movies[0].genre.split(", ")[0];
-    // dispatch(A_set_fillter_genre_and_year(genre, fillter_movie_by_year));
-    // dispatch(A_filter_movies(f_movies));
-    // dispatch(A_movie_page(0));
-  };
+  }, [genreCounts]);
 
   return (
     <div>
@@ -159,7 +135,7 @@ export default function MoviesFilter() {
         </header>
 
         <div className="mt-2 d-flex flex-wrap">
-          {Object.entries(years).map(([_year, count]) => (
+          {Object.entries(yearCounts).map(([_year, count]) => (
             <div
               className={`px-2 py-3 bd-highlight col m-2 text-center text-info btn btn-dark ${
                 _year === fillter_movie_by_year && "border-success"
@@ -167,7 +143,13 @@ export default function MoviesFilter() {
               role="button"
               aria-disabled="true"
               style={{ borderRadius: "0" }}
-              onClick={() => count !== 0 && filterByYear(_year)}
+              onClick={() =>
+                dispatch(
+                  A_set_fillter_movie_by_year(
+                    _year === fillter_movie_by_year ? "" : _year
+                  )
+                )
+              }
               key={"movies page movie filter years " + _year + count}
             >
               {_year} <small className="d-inline text-white">({count})</small>

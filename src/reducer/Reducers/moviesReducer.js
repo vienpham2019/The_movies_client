@@ -3,7 +3,8 @@ let initState = {
   fillter_movie_by_year: "",
   fillter_movie_by_genre: "",
   sort_movie_by: "release_date",
-  counts: [],
+  genreCounts: [],
+  yearCounts: [],
   displayVideos: [],
 };
 
@@ -14,12 +15,23 @@ export default function moviesReducer(state = initState, action) {
         ...state,
         ...action.values,
       };
-    case "SET_COUNTS":
+    case "SET_GENRE_COUNTS":
       return {
         ...state,
         ...action.values,
       };
+    case "SET_YEAR_COUNTS":
+      return {
+        ...state,
+        ...action.values,
+      };
+
     case "SET_FILTER_BY_GENRE":
+      return {
+        ...state,
+        ...action.values,
+      };
+    case "SET_FILTER_BY_YEAR":
       return {
         ...state,
         ...action.values,

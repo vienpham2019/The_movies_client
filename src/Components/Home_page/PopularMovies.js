@@ -1,10 +1,6 @@
 import MovieContent from "./MovieContent";
 import { useDispatch } from "react-redux";
-import {
-  A_filter_movies,
-  A_set_sort_movies_by,
-  A_movie_page,
-} from "../../reducer/Actions/movies_action";
+
 import { useNavigate } from "react-router-dom";
 import axios from "../../helper/init.axios";
 import { useEffect, useState } from "react";
@@ -55,10 +51,6 @@ export default function PopularMovies() {
                       role="button"
                       onClick={() => {
                         window.scrollTo(0, 0);
-                        dispatch(A_filter_movies(popular_movies));
-                        dispatch(A_set_sort_movies_by("Popularity"));
-                        dispatch(A_movie_page(0));
-
                         navigate("/movies");
                       }}
                     >

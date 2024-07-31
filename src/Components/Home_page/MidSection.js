@@ -1,20 +1,38 @@
-import { useDispatch, useSelector } from "react-redux";
-import { A_set_display_videos } from "../../reducer/Actions/movie_info_action";
-import { randomNumber } from "../../helper_method";
+import { useDispatch } from "react-redux";
+import { A_set_display_videos } from "../../reducer/Actions/movie_actions";
 import { useNavigate } from "react-router-dom";
+import axios from "../../helper/init.axios";
+import { useEffect, useState } from "react";
 
 export default function MidSection() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { newest_movies } = useSelector((state) => state.topMoviesReducer);
-  const ran_num = randomNumber(0, newest_movies.length - 3);
+  const [newest_movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/movie/all`, {
+          params: {
+            page: 1,
+            limit: 3,
+          },
+        });
+        setMovies(response.data.metadata.movies);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div className="bg-dark movie-slider mb-1 mt-5">
       <div className="masvideos masvideos-movies ">
         <div className="movies columns-3">
           <div className="movies__inner">
             {/*  */}
-            {newest_movies.slice(ran_num, ran_num + 3).map((movie) => (
+            {newest_movies.map((movie) => (
               <div
                 className="movie has-bg py-5"
                 key={"home page mid section newest movie " + movie.title}

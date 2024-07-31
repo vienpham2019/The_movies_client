@@ -1,12 +1,8 @@
-import { useDispatch } from "react-redux";
-import { A_set_movie_info } from "../../reducer/Actions/movie_info_action";
-import { getMovieAndReviews } from "../../helper_method";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../../helper/init.axios";
 
 export default function HomeHeader() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [display_movies, setMovies] = useState([]);
@@ -94,9 +90,7 @@ export default function HomeHeader() {
                             className="button-custom fadeInUp animated"
                             role="button"
                             onClick={async () => {
-                              let _data = await getMovieAndReviews(movie);
                               window.scrollTo(0, 0);
-                              dispatch(A_set_movie_info(_data));
                               navigate(`/movie_info/${movie._id}`);
                             }}
                           >

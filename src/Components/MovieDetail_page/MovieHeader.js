@@ -7,7 +7,7 @@ import {
   A_update_favorite,
 } from "../../reducer/Actions/user_action";
 
-import { A_set_display_videos } from "../../reducer/Actions/movie_info_action";
+import { A_set_display_videos } from "../../reducer/Actions/movie_actions";
 
 import {
   handle_update_widhlist,

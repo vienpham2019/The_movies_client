@@ -3,8 +3,7 @@ import { useState } from "react";
 import { validateLength, validateEmail } from "../../validation";
 import ReviewDetail from "./ReviewDetail";
 import Pagination from ".././Pagination";
-import { useSelector, useDispatch } from "react-redux";
-import { A_add_movie_reviews } from "../../reducer/Actions/movie_info_action";
+import { useSelector } from "react-redux";
 
 import { addMovieReview, rotate_array } from "../../helper_method";
 
@@ -13,7 +12,6 @@ export default function MovieReviews({ movie }) {
 
   const { movie_page } = useSelector((state) => state.moviesReducer);
 
-  const dispatch = useDispatch();
   const displayReviewAmount = 5;
 
   const [reivewScore, setReviewScore] = useState(10);
@@ -59,7 +57,7 @@ export default function MovieReviews({ movie }) {
         date: `${mounth} ${day}, ${year}`,
       };
       let data = await addMovieReview(movie_token, review);
-      dispatch(A_add_movie_reviews(data.movie, data.movie_reviews));
+      // dispatch(A_add_movie_reviews(data.movie, data.movie_reviews));
       resetReviewForm();
     }
   };

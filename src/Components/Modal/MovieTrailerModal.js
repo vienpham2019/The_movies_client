@@ -1,7 +1,5 @@
-import { useSelector } from "react-redux";
-
 export default function MovieTrailerModal() {
-  const { displayVideos } = useSelector((state) => state.movieInfoReducer);
+  const displayVideos = "";
 
   const stopVideo = () => {
     let iframes = [...document.getElementsByClassName("movie_trailer_iframe")];

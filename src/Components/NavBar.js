@@ -1,18 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  A_display_movies_amount,
-  A_movie_page,
-  A_set_sort_movies_by,
-  A_set_fillter_genre_and_year,
-  A_filter_movies,
-} from "../reducer/Actions/movies_action";
+
 import { A_set_user } from "../reducer/Actions/user_action";
 import { useNavigate } from "react-router-dom";
 function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
-  const { movies } = useSelector((state) => state.moviesReducer);
   const { notifications } = useSelector((state) => state.notificationReducer);
   return (
     <nav
@@ -58,11 +51,7 @@ function NavBar() {
                 className="btn btn-link"
                 onClick={() => {
                   window.scrollTo(0, 0);
-                  dispatch(A_set_fillter_genre_and_year("All", " "));
-                  dispatch(A_set_sort_movies_by("Years"));
-                  dispatch(A_display_movies_amount(20));
-                  dispatch(A_filter_movies(movies));
-                  dispatch(A_movie_page(0));
+
                   navigate("/movies");
                 }}
               >
@@ -109,8 +98,7 @@ function NavBar() {
                     document.getElementById("login_nav_button").click();
                     return;
                   }
-                  dispatch(A_display_movies_amount(10));
-                  dispatch(A_movie_page(0));
+
                   navigate("/user_profile");
                 }}
               >

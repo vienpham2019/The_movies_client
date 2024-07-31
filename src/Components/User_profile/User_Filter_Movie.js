@@ -1,11 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { getGenres } from "../../user_helper_method";
-import {
-  A_filter_movies,
-  A_movie_page,
-  A_set_fillter_genre_and_year,
-  A_set_sort_movies_by,
-} from "../../reducer/Actions/movies_action";
 
 export default function User_Filter_Movie(props) {
   const dispatch = useDispatch();
@@ -31,9 +25,6 @@ export default function User_Filter_Movie(props) {
         movie.genre.match(new RegExp(genre, "i"))
       );
     }
-    dispatch(A_set_fillter_genre_and_year(genre, " "));
-    dispatch(A_filter_movies(f_movies));
-    dispatch(A_movie_page(0));
   };
 
   const sortMoviesBy = (sort) => {
@@ -47,9 +38,6 @@ export default function User_Filter_Movie(props) {
         : sort === "IBM Rating"
         ? filter_movies.sort((a, b) => b.vote_average - a.vote_average)
         : filter_movies.sort((a, b) => b.popularity - a.popularity);
-    dispatch(A_filter_movies(f_movies));
-    dispatch(A_set_sort_movies_by(sort));
-    dispatch(A_movie_page(0));
   };
 
   return (

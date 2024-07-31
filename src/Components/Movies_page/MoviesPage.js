@@ -6,8 +6,11 @@ import Pagination from ".././Pagination";
 import "./Movies.css";
 
 import axios from "../../helper/init.axios";
+import { useDispatch, useSelector } from "react-redux";
+import { A_set_counts } from "../../reducer/Actions/movie_actions";
 
 export default function MoviesPage(props) {
+  const dispatch = useDispatch();
   const [vodi_value, setVodiValue] = useState("grid");
   const [displaySideBar, setSideBar] = useState(false);
   const [page, setPage] = useState(1);
@@ -15,6 +18,8 @@ export default function MoviesPage(props) {
   const [search, setSearch] = useState("");
   const [movies, setMovies] = useState([]);
   const [totalMovies, setTotalMovies] = useState(0);
+  const { fillter_movie_by_year, fillter_movie_by_genre, sort_movie_by } =
+    useSelector((state) => state.moviesReducer);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,18 +28,22 @@ export default function MoviesPage(props) {
           params: {
             page,
             limit,
+            searchByGenre: fillter_movie_by_genre,
+            sortBy: sort_movie_by,
+            sortDir: -1,
             search,
           },
         });
         setMovies(response.data.metadata.movies);
         setTotalMovies(response.data.metadata.totalMovies);
+        dispatch(A_set_counts(response.data.metadata.counts));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [page, limit, search]);
+  }, [page, search, fillter_movie_by_genre, sort_movie_by]);
 
   let vodi = [
     { type: "grid", value: "fas fa-th" },

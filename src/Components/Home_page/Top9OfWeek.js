@@ -1,17 +1,9 @@
-import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import {
-  A_filter_movies,
-  A_set_sort_movies_by,
-  A_set_fillter_genre_and_year,
-  A_movie_page,
-} from "../../reducer/Actions/movies_action";
 
 import { useNavigate } from "react-router-dom";
 import axios from "../../helper/init.axios";
 
 export default function Top9OfWeek() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const genres = ["Action", "Horror", "Animation", "Drama"];
   const [display_movies, setDisplayMovies] = useState([]);
@@ -228,10 +220,6 @@ export default function Top9OfWeek() {
           role="button"
           onClick={() => {
             window.scrollTo(0, 0);
-            dispatch(A_filter_movies(display_movies));
-            dispatch(A_set_fillter_genre_and_year(filter_genre, " "));
-            dispatch(A_set_sort_movies_by("Years"));
-            dispatch(A_movie_page(0));
             navigate("/movies");
           }}
         >

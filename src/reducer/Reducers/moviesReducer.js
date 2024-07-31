@@ -1,12 +1,10 @@
 let initState = {
   movies: [],
-  home_header_movies: [],
-  filter_movies: [],
-  movie_page: 0,
-  display_movies_amount: 20,
   fillter_movie_by_year: "",
-  fillter_movie_by_genre: "All",
-  sort_movie_by: "Years",
+  fillter_movie_by_genre: "",
+  sort_movie_by: "release_date",
+  counts: [],
+  displayVideos: [],
 };
 
 export default function moviesReducer(state = initState, action) {
@@ -15,35 +13,23 @@ export default function moviesReducer(state = initState, action) {
       return {
         ...state,
         ...action.values,
-        filter_movies: action.values.movies,
-        display_movies: action.values.movies,
       };
-
-    case "FILTER_MOVIES":
+    case "SET_COUNTS":
       return {
         ...state,
         ...action.values,
       };
-
-    case "MOVIE_PAGE":
+    case "SET_FILTER_BY_GENRE":
       return {
         ...state,
         ...action.values,
       };
-
-    case "DISPLAY_MOVIES_AMOUNT":
+    case "SET_SORT_MOVIE_BY":
       return {
         ...state,
         ...action.values,
       };
-
-    case "SET_FILLTER_GENRE_AND_YEAR":
-      return {
-        ...state,
-        ...action.values,
-      };
-
-    case "SORT_MOVIES_BY":
+    case "SET_DISPLAY_VIDEOS":
       return {
         ...state,
         ...action.values,

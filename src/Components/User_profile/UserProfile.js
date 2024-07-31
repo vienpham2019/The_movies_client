@@ -6,13 +6,6 @@ import User_Filter_Movie from "./User_Filter_Movie";
 import Favorites_Widhlist from "./Favorites_Widhlist";
 import { rotate_array } from "../../helper_method";
 
-import {
-  A_movie_page,
-  A_set_fillter_genre_and_year,
-  A_set_sort_movies_by,
-  A_filter_movies,
-} from "../../reducer/Actions/movies_action";
-
 import { A_set_user } from "../../reducer/Actions/user_action";
 
 import "./User.css";
@@ -82,16 +75,7 @@ export default function UserProfile(props) {
                             value.key === "Favorites" ||
                             value.key === "Widhlist"
                           ) {
-                            dispatch(A_movie_page(0));
-                            dispatch(A_set_fillter_genre_and_year("All", " "));
-                            dispatch(A_set_sort_movies_by("Years"));
-                            dispatch(
-                              A_filter_movies(
-                                value.key === "Favorites"
-                                  ? rotate_array(Array.from(favorites.values()))
-                                  : rotate_array(Array.from(widhlists.values()))
-                              )
-                            );
+                            console.log();
                           }
 
                           setNavContent(value.key);

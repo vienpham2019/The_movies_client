@@ -13,9 +13,6 @@ export default function movieInfoReducer(state = initState, action) {
     case "ADD_MOVIE_REVIEWS":
       return { ...state, ...action.values };
 
-    case "SET_DISPLAY_VIDEOS":
-      return { ...state, ...action.values };
-
     default:
       return state;
   }

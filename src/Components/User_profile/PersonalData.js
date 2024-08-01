@@ -1,10 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { validateLength, validateEmail } from "../../validation";
-import { update_user_info } from "../../user_helper_method";
 import { A_update_user_info } from "../../reducer/Actions/user_action";
-export default function PersonalData(props) {
-  let { user, token } = useSelector((state) => state.userReducer);
+import axios from "../../helper/init.axios";
+
+export default function PersonalData() {
+  let { user } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
   const [userDataError, setUserDataError] = useState({});
   const [updateUserSuccess, setUpdateUserSuccess] = useState(false);
@@ -12,28 +13,30 @@ export default function PersonalData(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let { first_name, last_name, email } = userInfo;
-    let first_name_error = validateLength(first_name, "First name", 1);
-    let last_name_error = validateLength(last_name, "Last name", 1);
+    let { firstName, lastName, email } = userInfo;
+    let first_name_error = validateLength(firstName, "First name", 1);
+    let last_name_error = validateLength(lastName, "Last name", 1);
     let email_error = validateEmail(email);
     if (first_name_error || last_name_error || email_error) {
       setUserDataError({ first_name_error, last_name_error, email_error });
       setUpdateUserSuccess(false);
     } else {
-      let user_data = await update_user_info({
-        ...userInfo,
-        token,
-      });
-
-      if (user_data.error) {
-        setUserDataError({ email_error: user_data.error });
-      } else {
+      try {
+        await axios.patch(`/user/update/${userInfo._id}`, {
+          ...userInfo,
+        });
         dispatch(A_update_user_info(userInfo));
         setUpdateUserSuccess(true);
         setUserDataError({});
         setTimeout(() => {
           setUpdateUserSuccess(false);
         }, 2000);
+      } catch (error) {
+        let { message } = error.response.data;
+        if (message.toLowerCase().includes("email")) {
+          setUserDataError({ email_error: message });
+          setUpdateUserSuccess(false);
+        }
       }
     }
   };
@@ -56,9 +59,9 @@ export default function PersonalData(props) {
                 userDataError.first_name_error && "is-invalid"
               }`}
               placeholder="First Name *"
-              value={userInfo.first_name}
+              value={userInfo.firstName}
               onChange={(e) =>
-                setUserInfo({ ...userInfo, first_name: e.target.value })
+                setUserInfo({ ...userInfo, firstName: e.target.value })
               }
             />
             {userDataError.first_name_error && (
@@ -73,9 +76,9 @@ export default function PersonalData(props) {
                 userDataError.last_name_error && "is-invalid"
               }`}
               placeholder="Last name *"
-              value={userInfo.last_name}
+              value={userInfo.lastName}
               onChange={(e) =>
-                setUserInfo({ ...userInfo, last_name: e.target.value })
+                setUserInfo({ ...userInfo, lastName: e.target.value })
               }
             />
             {userDataError.last_name_error && (

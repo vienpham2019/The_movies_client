@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { A_set_user } from "../reducer/Actions/user_action";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 function NavBar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useSelector((state) => state.userReducer);
   const { notifications } = useSelector((state) => state.notificationReducer);
   return (
@@ -64,12 +65,10 @@ function NavBar() {
                   role="button"
                   className="btn btn-link"
                   onClick={() => {
-                    dispatch(
-                      A_set_user(
-                        { user: null, token: null },
-                        { widhlists: [], favorites: [] }
-                      )
-                    );
+                    if (location.pathname === "/user_profile") {
+                      navigate("/");
+                    }
+                    dispatch(A_set_user(null));
                   }}
                 >
                   Logout

@@ -4,17 +4,16 @@ import PersonalData from "./PersonalData";
 import ChangePassword from "./ChangePassword";
 import User_Filter_Movie from "./User_Filter_Movie";
 import Favorites_Widhlist from "./Favorites_Widhlist";
-import { rotate_array } from "../../helper_method";
 
 import { A_set_user } from "../../reducer/Actions/user_action";
 
 import "./User.css";
-export default function UserProfile(props) {
+import { useNavigate } from "react-router-dom";
+export default function UserProfile() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [nav_content, setNavContent] = useState("Personal data");
-  const { user, widhlists, favorites } = useSelector(
-    (state) => state.userReducer
-  );
+  const { user } = useSelector((state) => state.userReducer);
   const [displaySideBar, setSideBar] = useState(false);
   const profileNav = [
     { key: "Widhlist", icon: "fas fa-plus" },
@@ -25,10 +24,10 @@ export default function UserProfile(props) {
 
   useEffect(() => {
     if (!user) {
-      props.history.push("/");
+      navigate("/");
       document.getElementById("login_nav_button").click();
     }
-  });
+  }, [user]);
 
   const handleDisplayFilter = (value) =>
     (value === "Favorites" || value === "Widhlist") && value === nav_content;
@@ -55,7 +54,7 @@ export default function UserProfile(props) {
             </div>
             <div className="top-movies-list">
               <h6 className="text-muted mb-5 mt-2 text-uppercase px-3">
-                WELCOME, {user && `${user.first_name} ${user.last_name}`}!
+                WELCOME, {user && `${user.firstName} ${user.lastName}`}!
               </h6>
               <nav className="mb-10 mb-md-0">
                 <div className="list-group list-group-sm list-group-strong list-group-flush-x">
@@ -107,13 +106,8 @@ export default function UserProfile(props) {
                     className="list-group-item-action py-4 px-3 d-flex bd-highlight"
                     role="button"
                     onClick={() => {
-                      props.history.push("/");
-                      dispatch(
-                        A_set_user(
-                          { user: null, token: null },
-                          { widhlists: [], favorites: [] }
-                        )
-                      );
+                      navigate("/");
+                      dispatch(A_set_user(null));
                     }}
                   >
                     <div className="bd-highlight">
@@ -148,16 +142,10 @@ export default function UserProfile(props) {
           {user && (
             <div className="col-12 col-md-9 bg-light mx-1 p-0 h-auto border">
               {nav_content === "Widhlist" && (
-                <Favorites_Widhlist
-                  title={"Widhlist"}
-                  history={props.history}
-                />
+                <Favorites_Widhlist title={"Widhlist"} />
               )}
               {nav_content === "Favorites" && (
-                <Favorites_Widhlist
-                  title={"Favorites"}
-                  history={props.history}
-                />
+                <Favorites_Widhlist title={"Favorites"} />
               )}
               {nav_content === "Personal data" && <PersonalData />}
               {nav_content === "Change password" && <ChangePassword />}

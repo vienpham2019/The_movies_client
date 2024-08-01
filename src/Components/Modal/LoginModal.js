@@ -2,11 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { A_set_user } from "../../reducer/Actions/user_action";
 import { validateLength, validateEmail } from "../../validation";
-import {
-  login,
-  register,
-  set_widhlists_and_favorites,
-} from "../../user_helper_method";
+import axios from "../../helper/init.axios";
 
 export default function LoginModal() {
   const dispatch = useDispatch();
@@ -29,17 +25,26 @@ export default function LoginModal() {
     let { email, password } = loginValue;
     let email_error = validateEmail(email);
     let password_error = validateLength(password, "Password", 5);
-    setIsLoginLoading(true);
-    let data = await login(email, password);
-    if (email_error || password_error || data.error) {
+    if (email_error || password_error) {
       setLoginError(true);
-    } else {
-      let w_and_f = set_widhlists_and_favorites(data.widhlists, data.favorites);
-      dispatch(A_set_user(data, w_and_f));
+      return;
+    }
+    setIsLoginLoading(true);
+    try {
+      const res = await axios.post(`/user/login`, {
+        email,
+        password,
+      });
+      dispatch(A_set_user(res.data.metadata));
       setLoginError(false);
       setLoginSuccess(true);
+      resetLogin();
+      document.getElementById("login_nav_button").click();
+    } catch (error) {
+      setLoginError(true);
+    } finally {
+      setIsLoginLoading(false);
     }
-    setIsLoginLoading(false);
   };
 
   const resetLogin = () => {
@@ -63,38 +68,41 @@ export default function LoginModal() {
     let lastName_error = validateLength(lastName, "Last name", 1);
     let email_error = validateEmail(email);
     let password_error = validateLength(password, "Password", 5);
-    let register_data = await register({
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      password: "",
-    });
-    if (
-      firstName_error ||
-      lastName_error ||
-      email_error ||
-      password_error ||
-      register_data.error
-    ) {
+
+    if (firstName_error || lastName_error || email_error || password_error) {
       setRegisterError({
         firstName_error,
         lastName_error,
-        email_error:
-          email_error ||
-          (register_data.error && `Email ${register_data.error}`),
+        email_error,
         password_error,
       });
       setRegisterSuccess(false);
     } else {
-      let register_data = await register({
-        first_name: firstName,
-        last_name: lastName,
-        email,
-        password,
-      });
-      if (!register_data.error) {
+      try {
+        await axios.post(`/user/register`, {
+          firstName,
+          lastName,
+          email,
+          password,
+        });
         setRegisterError({});
         setRegisterSuccess(true);
+        resetRegister();
+      } catch (error) {
+        let { message } = error.response.data;
+        if (message.toLowerCase().includes("password")) {
+          setRegisterError({
+            password_error: message,
+          });
+          setRegisterSuccess(false);
+        }
+
+        if (message.toLowerCase().includes("email")) {
+          setRegisterError({
+            email_error: message,
+          });
+          setRegisterSuccess(false);
+        }
       }
     }
   };

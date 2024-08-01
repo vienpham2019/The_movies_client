@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { validateLength, validateEmail } from "../../validation";
 import ReviewDetail from "./ReviewDetail";
 import Pagination from ".././Pagination";
-import { useSelector } from "react-redux";
 
-import { addMovieReview, rotate_array } from "../../helper_method";
+import { useParams } from "react-router-dom";
+import axios from "../../helper/init.axios";
+import { useDispatch } from "react-redux";
+import { A_set_movie_review_details } from "../../reducer/Actions/movie_info_action";
 
-export default function MovieReviews({ movie }) {
-  const { movieReviews, movie_token } = movie;
+export default function MovieReviews() {
+  const { id } = useParams();
+  const [movieReviews, setMovieReviews] = useState([]);
+  const [totalMovieReviews, setTotalMovieReviews] = useState(0);
+  const [totalReviewScore, setTotalReviewScore] = useState(0);
+  const [page, setPage] = useState(1);
+  const [addReviewSuccess, setAddReviewSuccess] = useState(false);
+  const limit = 10;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/review/all/${id}`, {
+          params: {
+            limit,
+            page,
+          },
+        });
+        const { totalReviews, reviews, totalScore } = res.data.metadata;
+        dispatch(A_set_movie_review_details({ totalReviews, totalScore }));
+        setMovieReviews(reviews || []);
+        setTotalMovieReviews(totalReviews || 0);
+        setTotalReviewScore(totalScore || 0);
+        setAddReviewSuccess(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-  const { movie_page } = useSelector((state) => state.moviesReducer);
-
-  const displayReviewAmount = 5;
-
+    fetchData();
+  }, [id, page, addReviewSuccess]);
+  const pages = Math.ceil(totalMovieReviews / limit);
   const [reivewScore, setReviewScore] = useState(10);
   const [movieNewReviewErrors, setMovieNewReviewErrors] = useState({});
-
-  const displayReviews = rotate_array(movieReviews).slice(
-    movie_page * displayReviewAmount,
-    (movie_page + 1) * displayReviewAmount
-  );
-
-  const pages = Math.ceil(movieReviews.length / displayReviewAmount);
 
   const resetReviewForm = () => {
     document.getElementById("new-review-form").reset();
@@ -51,14 +71,20 @@ export default function MovieReviews({ movie }) {
         date.getFullYear(),
       ];
       let review = {
+        movieId: id,
         author: name.value,
         content: content.value,
+        email: email.value,
         score: reivewScore,
         date: `${mounth} ${day}, ${year}`,
       };
-      let data = await addMovieReview(movie_token, review);
-      // dispatch(A_add_movie_reviews(data.movie, data.movie_reviews));
-      resetReviewForm();
+      try {
+        await axios.post(`/review/new`, review);
+        setAddReviewSuccess(true);
+        resetReviewForm();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
@@ -73,10 +99,10 @@ export default function MovieReviews({ movie }) {
               </strong>
               <div className=" m-2 col-12 col-md text-md-center">
                 <div className="gt-stars">
-                  {Array.from(Array(10)).map((_, i) => (
+                  {Array.from({ length: 10 }).map((_, i) => (
                     <i
                       className={`${
-                        i + 1 <= movie.reviews_total_score / movieReviews.length
+                        i + 1 <= totalReviewScore / totalMovieReviews
                           ? "fas"
                           : "far"
                       } fa-star`}
@@ -84,7 +110,7 @@ export default function MovieReviews({ movie }) {
                     ></i>
                   ))}
                   <span className="ml-2">
-                    <strong>Reviews({movieReviews.length})</strong>
+                    <strong>Reviews({totalMovieReviews})</strong>
                   </span>
                 </div>
               </div>
@@ -197,7 +223,7 @@ export default function MovieReviews({ movie }) {
 
             {/* review */}
             <div className="mt-5">
-              {displayReviews.map((review, i) => (
+              {movieReviews.map((review, i) => (
                 <ReviewDetail
                   review={review}
                   key={"movie detail page movie reviews review " + i}
@@ -208,7 +234,11 @@ export default function MovieReviews({ movie }) {
             {/* pagination */}
             {pages > 1 && (
               <div className="mt-5 border-top pt-2">
-                <Pagination pages={pages} is_review={true} />
+                <Pagination
+                  pages={pages}
+                  currentPage={page}
+                  setPage={setPage}
+                />
               </div>
             )}
           </div>

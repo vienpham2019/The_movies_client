@@ -1,21 +1,11 @@
 import { createUseStyles } from "react-jss";
-import { getDate, getFirstNGenre } from "../../helper_method";
+import { getFirstNGenre } from "../../helper_method";
 import { useSelector, useDispatch } from "react-redux";
-
-import {
-  A_update_widhlist,
-  A_update_favorite,
-} from "../../reducer/Actions/user_action";
 
 import { A_set_display_videos } from "../../reducer/Actions/movie_actions";
 
-import {
-  handle_update_widhlist,
-  handle_update_favorite,
-  handle_notification,
-} from "../../user_helper_method";
-
-import { A_set_notification } from "../../reducer/Actions/notification_action";
+import { useEffect, useState } from "react";
+import axios from "../../helper/init.axios";
 
 const styles = createUseStyles({
   backgroundImage: (props) => ({
@@ -37,35 +27,79 @@ const styles = createUseStyles({
 });
 export default function MovieHeader({ movie }) {
   const dispatch = useDispatch();
-  const { notifications } = useSelector((state) => state.notificationReducer);
-  const { movieReviews } = movie;
-
-  const { widhlists, favorites, user, token } = useSelector(
-    (state) => state.userReducer
+  const { totalReviews, totalScore } = useSelector(
+    (state) => state.movieInfoReducer
   );
+  const [is_favorites, setIsFavorite] = useState(false);
+  const [is_widhlists, setIsWidhlist] = useState(false);
+  const { user } = useSelector((state) => state.userReducer);
 
-  const is_widhlists = user && widhlists.has(movie.id);
-  const is_favorites = user && favorites.has(movie.id);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) setIsFavorite(false);
+      else {
+        try {
+          const res = await axios.get(`/favorite/isSelect`, {
+            params: {
+              userId: user._id,
+              movieId: movie._id,
+            },
+          });
+          setIsFavorite(res.data.metadata);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchData();
+  }, [user, movie]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user) setIsWidhlist(false);
+      else {
+        try {
+          const res = await axios.get(`/widhlist/isSelect`, {
+            params: {
+              userId: user._id,
+              movieId: movie._id,
+            },
+          });
+          setIsWidhlist(res.data.metadata);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchData();
+  }, [user, movie]);
 
   const [year, month, day] = movie.release_date.split("T")[0].split("-");
-  const revies_avg_score = movieReviews.length
-    ? movie.reviews_total_score / movieReviews.length
-    : 0;
 
   const handle_widhlist = async () => {
     if (!user) {
       document.getElementById("login_nav_button").click();
       return;
     }
-    dispatch(
-      A_set_notification([
-        ...notifications,
-        handle_notification(widhlists, "Widhlist", movie),
-      ])
-    );
-    dispatch(
-      A_update_widhlist(await handle_update_widhlist(widhlists, movie, token))
-    );
+    try {
+      if (!is_widhlists) {
+        await axios.post(`/widhlist/new`, {
+          userId: user._id,
+          movieId: movie._id,
+        });
+      } else {
+        await axios.delete(`/widhlist/delete`, {
+          params: {
+            userId: user._id,
+            movieId: movie._id,
+          },
+        });
+      }
+
+      setIsWidhlist(!is_widhlists);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handle_favorite = async () => {
@@ -74,16 +108,24 @@ export default function MovieHeader({ movie }) {
       return;
     }
 
-    dispatch(
-      A_set_notification([
-        ...notifications,
-        handle_notification(favorites, "Favorites", movie),
-      ])
-    );
-
-    dispatch(
-      A_update_favorite(await handle_update_favorite(favorites, movie, token))
-    );
+    try {
+      if (!is_favorites) {
+        await axios.post(`/favorite/new`, {
+          userId: user._id,
+          movieId: movie._id,
+        });
+      } else {
+        await axios.delete(`/favorite/delete`, {
+          params: {
+            userId: user._id,
+            movieId: movie._id,
+          },
+        });
+      }
+      setIsFavorite(!is_favorites);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -146,9 +188,9 @@ export default function MovieHeader({ movie }) {
                   <span style={{ fontSize: "1.2em" }}>
                     <strong className="mr-2">
                       Reviews(
-                      {movieReviews && movieReviews.length})
+                      {totalReviews})
                     </strong>
-                    {Math.floor(revies_avg_score)}
+                    {Math.floor(totalScore / totalReviews) || 0}
                     /10
                   </span>
                 </div>
@@ -156,7 +198,9 @@ export default function MovieHeader({ movie }) {
                   {Array.from(Array(10)).map((_, i) => (
                     <i
                       className={`${
-                        i + 1 <= revies_avg_score ? "fas" : "far"
+                        i + 1 <= (Math.floor(totalScore / totalReviews) || 0)
+                          ? "fas"
+                          : "far"
                       } fa-star`}
                       key={
                         "movie detail page movie header review avg star " + i

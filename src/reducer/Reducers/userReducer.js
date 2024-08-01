@@ -1,7 +1,5 @@
 const initState = {
   user: null,
-  widhlists: [],
-  favorites: [],
   token: null,
 };
 

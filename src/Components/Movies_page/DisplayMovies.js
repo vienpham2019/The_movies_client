@@ -134,7 +134,7 @@ export default function DisplayMovies({ vodi_value, movies }) {
                     >
                       <i className="fas fa-info"></i> More Info
                     </span>
-                    <div className="mx-1">
+                    {/* <div className="mx-1">
                       <span
                         className={`btn_ btn-block_ btn-outline-dark_ ${
                           user && widhlists.has(movie.id)
@@ -146,8 +146,8 @@ export default function DisplayMovies({ vodi_value, movies }) {
                       >
                         <i className="fas fa-plus"></i> Widhlist
                       </span>
-                    </div>
-                    <div className="mx-1">
+                    </div> */}
+                    {/* <div className="mx-1">
                       <span
                         className={`btn_ btn-block_ btn-outline-dark_ ${
                           user && favorites.has(movie.id)
@@ -159,7 +159,7 @@ export default function DisplayMovies({ vodi_value, movies }) {
                       >
                         <i className="fas fa-heart"></i> Favorite
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <span className="text-info">

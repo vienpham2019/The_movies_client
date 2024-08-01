@@ -20,7 +20,7 @@ function Favorites_Widhlist(props) {
         <span className="py-3 bg-dark text-white">{title}</span>
       </h4>
       {movies.length ? (
-        <DisplayMovies vodi_value={"grid"} history={props.history} />
+        <DisplayMovies vodi_value={"grid"} />
       ) : (
         <div className="p-5 text-center">
           <i className="fas fa-clipboard-list text-white fa-4x py-3"></i> <br />

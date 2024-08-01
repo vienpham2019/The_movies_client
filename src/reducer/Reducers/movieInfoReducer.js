@@ -1,16 +1,8 @@
-let initState = {
-  movie: null,
-  movie_reviews: [],
-  displayVideos: [],
-  movie_token: null,
-};
+let initState = { totalReviews: 0, totalScore: 0 };
 
 export default function movieInfoReducer(state = initState, action) {
   switch (action.type) {
-    case "SET_MOVIE_INFO":
-      return { ...state, ...action.values };
-
-    case "ADD_MOVIE_REVIEWS":
+    case "SET_MOVIE_REVIEW_DETAILS":
       return { ...state, ...action.values };
 
     default:

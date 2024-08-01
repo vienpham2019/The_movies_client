@@ -1,12 +1,7 @@
-const A_set_user = (data, widhlists_and_favorites) => {
-  let { user, token } = data;
+const A_set_user = (user) => {
   return {
     type: "SET_USER",
-    values: {
-      user,
-      ...widhlists_and_favorites,
-      token,
-    },
+    values: { user },
   };
 };
 

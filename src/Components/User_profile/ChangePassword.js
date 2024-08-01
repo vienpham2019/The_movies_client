@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { validateLength } from "../../validation";
-import { handle_update_password } from "../../user_helper_method";
-export default function ChangePassword(props) {
-  let { token } = useSelector((state) => state.userReducer);
+import axios from "../../helper/init.axios";
+
+export default function ChangePassword() {
+  let { user } = useSelector((state) => state.userReducer);
   const [newPasswordError, setNewPasswordError] = useState({});
   const [updatePasswordSuccess, setUpdatePasswordSuccess] = useState(false);
   const [newPassword, setNewPassword] = useState({
@@ -28,10 +29,20 @@ export default function ChangePassword(props) {
         confirm_password_error: text,
       });
     } else {
-      await handle_update_password(password, token);
-      setNewPasswordError({});
-      setNewPassword({ password: "", confirm_password: "" });
-      setUpdatePasswordSuccess(true);
+      try {
+        await axios.patch(`/user/changePassword/${user._id}`, {
+          password,
+        });
+        setNewPasswordError({});
+        setNewPassword({ password: "", confirm_password: "" });
+        setUpdatePasswordSuccess(true);
+      } catch (error) {
+        let { message } = error.response.data;
+        setNewPasswordError({
+          password_error: message,
+          confirm_password_error: message,
+        });
+      }
     }
   };
 

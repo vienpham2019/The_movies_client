@@ -138,7 +138,10 @@ export default function PersonalData() {
               checked={userInfo.gender && userInfo.gender === "Male"}
               onChange={() => setUserInfo({ ...userInfo, gender: "Male" })}
             />
-            <label className="text-muted form-check-label" for="inlineRadio1">
+            <label
+              className="text-muted form-check-label"
+              htmlFor="inlineRadio1"
+            >
               MALE
             </label>
           </div>
@@ -152,7 +155,10 @@ export default function PersonalData() {
               checked={userInfo.gender && userInfo.gender === "Female"}
               onChange={() => setUserInfo({ ...userInfo, gender: "Female" })}
             />
-            <label className="text-muted form-check-label" for="inlineRadio2">
+            <label
+              className="text-muted form-check-label"
+              htmlFor="inlineRadio2"
+            >
               FEMALE
             </label>
           </div>

@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PersonalData from "./PersonalData";
 import ChangePassword from "./ChangePassword";
-import User_Filter_Movie from "./User_Filter_Movie";
-import Favorites_Widhlist from "./Favorites_Widhlist";
 
 import { A_set_user } from "../../reducer/Actions/user_action";
 
 import "./User.css";
 import { useNavigate } from "react-router-dom";
+import Favorites from "./Favorites";
+import Widhlist from "./Widhlist";
 export default function UserProfile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,10 +27,7 @@ export default function UserProfile() {
       navigate("/");
       document.getElementById("login_nav_button").click();
     }
-  }, [user]);
-
-  const handleDisplayFilter = (value) =>
-    (value === "Favorites" || value === "Widhlist") && value === nav_content;
+  }, [user, navigate]);
 
   return (
     <section
@@ -92,12 +89,6 @@ export default function UserProfile() {
                         </div>
                       </span>
 
-                      {handleDisplayFilter(value.key) && (
-                        <div className="bg-dark px-2 py-4">
-                          <User_Filter_Movie title={value.key} />
-                        </div>
-                      )}
-
                       <hr className="m-0" />
                     </div>
                   ))}
@@ -141,12 +132,8 @@ export default function UserProfile() {
           </div>
           {user && (
             <div className="col-12 col-md-9 bg-light mx-1 p-0 h-auto border">
-              {nav_content === "Widhlist" && (
-                <Favorites_Widhlist title={"Widhlist"} />
-              )}
-              {nav_content === "Favorites" && (
-                <Favorites_Widhlist title={"Favorites"} />
-              )}
+              {nav_content === "Widhlist" && <Widhlist />}
+              {nav_content === "Favorites" && <Favorites />}
               {nav_content === "Personal data" && <PersonalData />}
               {nav_content === "Change password" && <ChangePassword />}
             </div>

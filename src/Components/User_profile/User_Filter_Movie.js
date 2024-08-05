@@ -1,8 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getGenres } from "../../user_helper_method";
 
 export default function User_Filter_Movie(props) {
-  const dispatch = useDispatch();
   let { title } = props;
   let { widhlists, favorites } = useSelector((state) => state.userReducer);
   const sortBy = ["Years", "IBM Rating", "Popularity"];

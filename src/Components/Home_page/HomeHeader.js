@@ -1,16 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "../../helper/init.axios";
-import LoadingPage from "../LoadingPage";
 export default function HomeHeader() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [display_movies, setMovies] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const response = await axios.get(`/movie/all`, {
           params: {
             page: 1,
@@ -21,8 +18,6 @@ export default function HomeHeader() {
         setMovies(response.data.metadata.movies);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -34,7 +29,6 @@ export default function HomeHeader() {
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) return <LoadingPage />;
   return (
     <div>
       <div

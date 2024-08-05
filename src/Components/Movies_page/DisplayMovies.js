@@ -1,57 +1,9 @@
 import { getDate, getFirstNGenre } from "../../helper_method";
-import {
-  handle_update_widhlist,
-  handle_update_favorite,
-  handle_notification,
-} from "../../user_helper_method";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  A_update_widhlist,
-  A_update_favorite,
-} from "../../reducer/Actions/user_action";
 
-import { A_set_notification } from "../../reducer/Actions/notification_action";
 import { useNavigate } from "react-router-dom";
 
 export default function DisplayMovies({ vodi_value, movies }) {
   const navigate = useNavigate();
-  const { notifications } = useSelector((state) => state.notificationReducer);
-  const { widhlists, favorites, user, token } = useSelector(
-    (state) => state.userReducer
-  );
-  const dispatch = useDispatch();
-
-  const handle_widhlist = async (movie) => {
-    if (!user) {
-      document.getElementById("login_nav_button").click();
-      return;
-    }
-    dispatch(
-      A_set_notification([
-        ...notifications,
-        handle_notification(widhlists, "Wishlists", movie),
-      ])
-    );
-    dispatch(
-      A_update_widhlist(await handle_update_widhlist(widhlists, movie, token))
-    );
-  };
-
-  const handle_favorite = async (movie) => {
-    if (!user) {
-      document.getElementById("login_nav_button").click();
-      return;
-    }
-    dispatch(
-      A_set_notification([
-        ...notifications,
-        handle_notification(favorites, "Favorites", movie),
-      ])
-    );
-    dispatch(
-      A_update_favorite(await handle_update_favorite(favorites, movie, token))
-    );
-  };
 
   if (movies.length === 0)
     return (
@@ -134,32 +86,6 @@ export default function DisplayMovies({ vodi_value, movies }) {
                     >
                       <i className="fas fa-info"></i> More Info
                     </span>
-                    {/* <div className="mx-1">
-                      <span
-                        className={`btn_ btn-block_ btn-outline-dark_ ${
-                          user && widhlists.has(movie.id)
-                            ? "text-success border-success"
-                            : "text-white border"
-                        }`}
-                        role="button"
-                        onClick={() => handle_widhlist(movie)}
-                      >
-                        <i className="fas fa-plus"></i> Widhlist
-                      </span>
-                    </div> */}
-                    {/* <div className="mx-1">
-                      <span
-                        className={`btn_ btn-block_ btn-outline-dark_ ${
-                          user && favorites.has(movie.id)
-                            ? "text-success border-success"
-                            : "text-white border"
-                        }`}
-                        role="button"
-                        onClick={() => handle_favorite(movie)}
-                      >
-                        <i className="fas fa-heart"></i> Favorite
-                      </span>
-                    </div> */}
                   </div>
                 </div>
                 <span className="text-info">

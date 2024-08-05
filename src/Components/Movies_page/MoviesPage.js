@@ -4,16 +4,17 @@ import MoviesFilter from "./MoviesFilter";
 import TopMovies from "./TopMovies";
 import Pagination from ".././Pagination";
 import "./Movies.css";
-
 import axios from "../../helper/init.axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
   A_set_genre_counts,
   A_set_year_counts,
 } from "../../reducer/Actions/movie_actions";
+import LoadingPage from "../LoadingPage";
 
-export default function MoviesPage(props) {
+export default function MoviesPage() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [vodi_value, setVodiValue] = useState("grid");
   const [displaySideBar, setSideBar] = useState(false);
   const [page, setPage] = useState(1);
@@ -26,6 +27,7 @@ export default function MoviesPage(props) {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`/movie/all`, {
           params: {
@@ -46,6 +48,8 @@ export default function MoviesPage(props) {
         dispatch(A_set_year_counts(yearCounts || []));
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -66,7 +70,7 @@ export default function MoviesPage(props) {
   ];
 
   const pages = Math.ceil(totalMovies / limit);
-
+  if (loading) return <LoadingPage />;
   return (
     <div
       className="home-section section-movies-list w-100 m-0"
@@ -90,7 +94,7 @@ export default function MoviesPage(props) {
               <MoviesFilter />
             </div>
 
-            <TopMovies history={props.history} />
+            <TopMovies />
           </div>
 
           <div className="featured-with-list-view-movies-list pl-4 w-100">

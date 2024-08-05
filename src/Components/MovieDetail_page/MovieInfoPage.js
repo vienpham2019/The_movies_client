@@ -16,7 +16,6 @@ export default function MovieInfoPage() {
       try {
         const res = await axios.get(`/movie/details/${id}`);
         setMovie(res.data.metadata);
-        console.log(res);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

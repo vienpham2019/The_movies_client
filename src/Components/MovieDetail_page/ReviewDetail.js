@@ -18,7 +18,7 @@ export default function ReviewDetail({ review }) {
             <div className="row mb-6">
               <div className="col-12">
                 <div className="rating font-size-sm text-dark">
-                  {Array.from(Array(10)).map((_, i) => (
+                  {Array.from({ length: 10 }).map((_, i) => (
                     <i
                       className={`${i + 1 <= score ? "fas" : "far"} fa-star `}
                       key={"movie detail page movie review detail star " + i}

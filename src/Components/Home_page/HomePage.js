@@ -6,6 +6,7 @@ import HomeHeader from "./HomeHeader";
 import axios from "../../helper/init.axios";
 import { useEffect, useState } from "react";
 import "./HomePage.css";
+import LoadingPage from "../LoadingPage";
 
 export default function HomePage() {
   const [loading, setLoading] = useState(false);

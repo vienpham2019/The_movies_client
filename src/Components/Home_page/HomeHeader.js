@@ -27,6 +27,11 @@ export default function HomeHeader() {
     };
 
     fetchData();
+    // Set interval to refetch every 14 minutes (840000 milliseconds)
+    const interval = setInterval(fetchData, 840000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) return <LoadingPage />;
